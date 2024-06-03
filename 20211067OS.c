@@ -1,39 +1,40 @@
-//20211067 Àü¼ºÀº
-//2-1,2-2 Çß½À´Ï´Ù.
-//2-3 ¹Ì¿Ï¼º
+//20211067 ì „ì„±ì€
+//2-1 1,2,3,4,5
+//2-2 1,2,3,4
+//2-3 ë¯¸ì™„ì„±
 
 //2-1
 /*
 #include <stdio.h>
 #include <stdlib.h>
-// ÇÁ·Î¼¼½º ±¸Á¶Ã¼
+// í”„ë¡œì„¸ìŠ¤ êµ¬ì¡°ì²´
 typedef struct Process {
     int pid;
     char type; // 'F' for Foreground, 'B' for Background
     struct Process* next;
 } Process;
 
-// ¿¬°á ¸®½ºÆ® ³ëµå ±¸Á¶Ã¼
+// ì—°ê²° ë¦¬ìŠ¤íŠ¸ ë…¸ë“œ êµ¬ì¡°ì²´
 typedef struct ListNode {
     Process* head;
     int length;
     struct ListNode* next;
 } ListNode;
 
-// ½ºÅÃ ³ëµå ±¸Á¶Ã¼
+// ìŠ¤íƒ ë…¸ë“œ êµ¬ì¡°ì²´
 typedef struct StackNode {
     ListNode* list;
     struct StackNode* next;
 } StackNode;
 
-// Dynamic Queue ±¸Á¶Ã¼
+// Dynamic Queue êµ¬ì¡°ì²´
 typedef struct {
     StackNode* top;
     int threshold;
     StackNode* promote_node;
 } DynamicQueue;
 
-// ÇÁ·Î¼¼½º »ı¼º
+// í”„ë¡œì„¸ìŠ¤ ìƒì„±
 Process* create_process(int pid, char type) {
     Process* new_process = (Process*)malloc(sizeof(Process));
     new_process->pid = pid;
@@ -42,7 +43,7 @@ Process* create_process(int pid, char type) {
     return new_process;
 }
 
-// ¸®½ºÆ® ³ëµå »ı¼º
+// ë¦¬ìŠ¤íŠ¸ ë…¸ë“œ ìƒì„±
 ListNode* create_list_node() {
     ListNode* new_list = (ListNode*)malloc(sizeof(ListNode));
     new_list->head = NULL;
@@ -51,7 +52,7 @@ ListNode* create_list_node() {
     return new_list;
 }
 
-// ½ºÅÃ ³ëµå »ı¼º
+// ìŠ¤íƒ ë…¸ë“œ ìƒì„±
 StackNode* create_stack_node() {
     StackNode* new_stack = (StackNode*)malloc(sizeof(StackNode));
     new_stack->list = create_list_node();
@@ -59,7 +60,7 @@ StackNode* create_stack_node() {
     return new_stack;
 }
 
-// Dynamic Queue ÃÊ±âÈ­
+// Dynamic Queue ì´ˆê¸°í™”
 DynamicQueue* create_dynamic_queue(int threshold) {
     DynamicQueue* queue = (DynamicQueue*)malloc(sizeof(DynamicQueue));
     queue->top = create_stack_node();
@@ -68,17 +69,17 @@ DynamicQueue* create_dynamic_queue(int threshold) {
     return queue;
 }
 
-// enqueue ÇÔ¼ö
+// enqueue í•¨ìˆ˜
 void enqueue(DynamicQueue* queue, Process* process) {
     StackNode* stack = queue->top;
     stack->list->length++;
     process->next = stack->list->head;
     stack->list->head = process;
 
-    // split_n_merge È£Ãâ ÇÊ¿ä
+    // split_n_merge í˜¸ì¶œ í•„ìš”
 }
 
-// dequeue ÇÔ¼ö
+// dequeue í•¨ìˆ˜
 Process* dequeue(DynamicQueue* queue) {
     if (queue->top == NULL) {
         return NULL;
@@ -103,17 +104,17 @@ Process* dequeue(DynamicQueue* queue) {
     return process;
 }
 
-// promote ÇÔ¼ö
+// promote í•¨ìˆ˜
 void promote(DynamicQueue* queue) {
-    // ÇÁ·Î¼¼½º¸¦ »óÀ§ ¸®½ºÆ®·Î ÀÌµ¿½ÃÅ°´Â ÄÚµå ÇÊ¿ä
+    // í”„ë¡œì„¸ìŠ¤ë¥¼ ìƒìœ„ ë¦¬ìŠ¤íŠ¸ë¡œ ì´ë™ì‹œí‚¤ëŠ” ì½”ë“œ í•„ìš”
 }
 
-// split_n_merge ÇÔ¼ö
+// split_n_merge í•¨ìˆ˜
 void split_n_merge(DynamicQueue* queue) {
-    // ¸®½ºÆ® ±æÀÌ°¡ ÀÓ°èÄ¡¸¦ ³ÑÀ» °æ¿ì ¸®½ºÆ®¸¦ ºĞÇÒÇÏ°í º´ÇÕÇÏ´Â ÄÚµå ÇÊ¿ä
+    // ë¦¬ìŠ¤íŠ¸ ê¸¸ì´ê°€ ì„ê³„ì¹˜ë¥¼ ë„˜ì„ ê²½ìš° ë¦¬ìŠ¤íŠ¸ë¥¼ ë¶„í• í•˜ê³  ë³‘í•©í•˜ëŠ” ì½”ë“œ í•„ìš”
 }
 
-// Wait Queue ±¸Á¶Ã¼¿Í ÇÔ¼ö Á¤ÀÇ
+// Wait Queue êµ¬ì¡°ì²´ì™€ í•¨ìˆ˜ ì •ì˜
 typedef struct WaitQueueNode {
     Process* process;
     int wait_time;
@@ -138,7 +139,7 @@ void add_to_wait_queue(WaitQueue* wq, Process* process, int wait_time) {
     wq->head = node;
 }
 
-// Å¥ »óÅÂ Ãâ·Â ÇÔ¼ö
+// í ìƒíƒœ ì¶œë ¥ í•¨ìˆ˜
 void print_queue(DynamicQueue* dq, WaitQueue* wq) {
     StackNode* stack = dq->top;
     printf("---------------------------\n");
